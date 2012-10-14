@@ -1,6 +1,6 @@
 # jiraclient
 
-This is JIRA GUI client written in Java/Swing. It is written in Clojure and uses JIRA Rest Client Library.
+This is JIRA GUI client written in Java/Swing. It is written in Clojure and uses [JIRA REST Java Client Library](https://studio.atlassian.com/wiki/display/JRJC/Home).
 
 ## Usage
 
