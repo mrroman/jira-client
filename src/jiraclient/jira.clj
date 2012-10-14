@@ -21,10 +21,16 @@
 (defn get-issue [jira-client ticket-id]
   "Get issue object from JIRA"
   (let [issue-client (.getIssueClient jira-client)]
-    (.getIssue issue-client ticket-id progress-monitor)))
+    (bean (.getIssue issue-client ticket-id progress-monitor))))
 
-(defn search-issues [jira-client jira-query]
+(defn search-issues [jira-client jira-query & args]
   "Search for issues"
-  (let [search-client (.getSearchClient jira-client)]
-    (-> (.searchJql search-client jira-query progress-monitor)
+  (let [default-opts { :maxResults 50 :startAt 0 }
+        opts-map (merge default-opts (apply hash-map args))
+        search-client (.getSearchClient jira-client)]
+    (-> (.searchJql search-client jira-query (:maxResults opts-map) (:startAt opts-map) progress-monitor)
         (.getIssues))))
+
+(defn load-issues [jira-client issues]
+  "Load complete issues from JIRA server"
+  (map #(get-issue jira-client (.getKey %)) issues))
